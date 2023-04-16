@@ -45,7 +45,9 @@ const login = async (req, res) => {
 };
 
 const searchUsers = async (req, res) => {
-  const { name } = req.query;
+  const { name, page = 1, limit = 10 } = req.query;
+  const skip = (page - 1) * limit;
+
   try {
     const users = await User.find({
       $and: [
@@ -64,11 +66,38 @@ const searchUsers = async (req, res) => {
           ],
         },
         {
-          _id: { $ne: req.user._id }
-        }
+          _id: { $ne: req.user._id },
+        },
+      ],
+    })
+      .skip(skip)
+      .limit(parseInt(limit));
+
+    const totalUsers = await User.countDocuments({
+      $and: [
+        {
+          $or: [
+            { firstName: { $regex: `^${name}`, $options: "i" } },
+            { lastName: { $regex: `^${name}`, $options: "i" } },
+            {
+              $expr: {
+                $regexMatch: {
+                  input: { $concat: ["$firstName", " ", "$lastName"] },
+                  regex: new RegExp(`^${name}`, "i"),
+                },
+              },
+            },
+          ],
+        },
+        {
+          _id: { $ne: req.user._id },
+        },
       ],
     });
-    return res.status(200).json({ users });
+
+    const totalPages = Math.ceil(totalUsers / limit);
+
+    return res.status(200).json({ users, totalPages });
   } catch (error) {
     return res.status(500).json({ message: "Internal Server Error" });
   }
@@ -82,8 +111,8 @@ const getUser = async (req, res) => {
 
   try {
     const user = await User.findOne({ _id: userId });
-    const {password, ...otherFields} = user._doc;
-    res.status(200).json({user: otherFields});
+    const { password, ...otherFields } = user._doc;
+    res.status(200).json({ user: otherFields });
   } catch (error) {
     return res.status(500).json({ message: "Internal Server Error" });
   }

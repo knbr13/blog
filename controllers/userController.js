@@ -8,11 +8,14 @@ const signup = async (req, res) => {
     if(!validator.isStrongPassword(password)) return res.status(400).json({error: "Not a strong password"});
 
     try {
-        const userExists = await User.find({email});
+        const userExists = await User.findOne({email});
         if(userExists) return res.status(400).json({error: "Email already exists"});
         const user = await User.create({firstName, lastName, email, password});
-        res.status(201).json({user});
+        const token = user.generateJWTToken();
+        res.status(201).json({user, token});
     } catch (error) {
         res.status(400).json({error: error.message});
     }
 }
+
+module.exports = {signup};

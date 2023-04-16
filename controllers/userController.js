@@ -28,7 +28,7 @@ const login = async (req, res) => {
         const user = await User.findOne({ email });
         if (!user) return res.status(400).json({ error: "No such user" });
         const validPassword = await bcrypt.compare(password, user.password);
-        if(!validPassword) return res.status(400).json({error: "Incorrect password"});
+        if (!validPassword) return res.status(400).json({ error: "Incorrect password" });
         const token = user.generateJWTToken();
         res.status(201).json({ user, token });
     } catch (error) {

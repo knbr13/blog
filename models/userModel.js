@@ -27,10 +27,10 @@ const userSchema = mongoose.Schema({
         type: String,
         default: "Available"
     }
-}, {timestamps: true});
+}, { timestamps: true });
 
 userSchema.pre('save', async function (next) {
-    if(!this.isModified('password')) return next();
+    if (!this.isModified('password')) return next();
     try {
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(this.password, salt);
@@ -44,9 +44,9 @@ userSchema.pre('save', async function (next) {
 userSchema.methods.generateJWTToken = function () {
     const user = this;
     const token = jwt.sign(
-      { _id: user._id, email: user.email },
-      process.env.JWT_SECRET,
-      { expiresIn: '1d' }
+        { _id: user._id, email: user.email },
+        process.env.JWT_SECRET,
+        { expiresIn: '1d' }
     );
     return token;
 };

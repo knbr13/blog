@@ -36,4 +36,28 @@ const login = async (req, res) => {
     }
 }
 
-module.exports = { signup, login };
+const searchUsers = async (req, res) => {
+    const { name } = req.query;
+    try {
+        const users = await User.find({
+            $or: [
+                { firstName: { $regex: `^${name}`, $options: 'i' } },
+                { lastName: { $regex: `^${name}`, $options: 'i' } },
+                {
+                    $expr: {
+                        $regexMatch: {
+                            input: { $concat: ['$firstName', ' ', '$lastName'] },
+                            regex: new RegExp(`^${name}`, 'i'),
+                        },
+                    },
+                },
+            ],
+        });
+        return res.status(200).json({ users });
+    } catch (error) {
+        return res.status(500).json({ message: 'Internal Server Error' });
+    }
+};
+
+
+module.exports = { signup, login, searchUsers };

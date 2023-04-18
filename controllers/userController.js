@@ -72,28 +72,28 @@ const searchUsers = async (req, res) => {
     })
       .skip(skip)
       .limit(parseInt(limit));
-      const totalUsers = await User.countDocuments({
-        $and: [
-          {
-            $or: [
-              { firstName: { $regex: `^${name}`, $options: "i" } },
-              { lastName: { $regex: `^${name}`, $options: "i" } },
-              {
-                $expr: {
-                  $regexMatch: {
-                    input: { $concat: ["$firstName", " ", "$lastName"] },
-                    regex: new RegExp(`^${name}`, "i"),
-                  },
+    const totalUsers = await User.countDocuments({
+      $and: [
+        {
+          $or: [
+            { firstName: { $regex: `^${name}`, $options: "i" } },
+            { lastName: { $regex: `^${name}`, $options: "i" } },
+            {
+              $expr: {
+                $regexMatch: {
+                  input: { $concat: ["$firstName", " ", "$lastName"] },
+                  regex: new RegExp(`^${name}`, "i"),
                 },
               },
-            ],
-          },
-          {
-            _id: { $ne: req.user._id },
-          },
-        ],
-      });
-      const totalPages = Math.ceil(totalUsers / parseInt(limit));
+            },
+          ],
+        },
+        {
+          _id: { $ne: req.user._id },
+        },
+      ],
+    });
+    const totalPages = Math.ceil(totalUsers / parseInt(limit));
     return res.status(200).json({ users, totalPages });
   } catch (error) {
     return res.status(500).json({ message: "Internal Server Error" });
@@ -115,4 +115,21 @@ const getUser = async (req, res) => {
   }
 };
 
-module.exports = { signup, login, searchUsers, getUser };
+const updateProfile = async (req, res) => {
+  const id = req.user._id;
+  const { firstName, lastName, about, profilePicture } = req.body;
+  if (!firstName || !lastName)
+    return res.status(400).json({ error: "Missing some required data" });
+  try {
+    const user = await User.findByIdAndUpdate(
+      id,
+      { firstName, lastName, about, profilePicture },
+      { new: true }
+    );
+    res.status(200).json({ user });
+  } catch (error) {
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+module.exports = { signup, login, searchUsers, getUser, updateProfile };

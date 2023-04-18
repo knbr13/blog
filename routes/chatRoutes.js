@@ -1,9 +1,8 @@
-const { createChat, deleteChat } = require('../controllers/chatController');
-const authMiddleware = require('../middlewares/authMiddleware');
+const { createChat, deleteChat, getChats } = require('../controllers/chatController');
 
 const router = require('express').Router();
 
-router.post("/", authMiddleware, createChat);
-router.route("/:chatId").delete(authMiddleware, deleteChat);
+router.route("/").get(getChats).post(createChat);
+router.route("/:chatId").delete(deleteChat);
 
 module.exports = router;

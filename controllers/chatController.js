@@ -50,17 +50,15 @@ const deleteChat = async (req, res) => {
   }
 };
 
-// I think that I should sort the chats based-on the most recent messages.
+const getChats = async (req, res) => {
+  try {
+    const chats = await Chat.find({
+      members: { $in: [req.user._id] },
+    }).sort({ updatedAt: -1 });
+    res.status(200).json(chats);
+  } catch (error) {
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+};
 
-// This is how the query will look like.
-
-/*
-Chat.find({ members: userId })
-  .populate({
-    path: 'messages',
-    options: { sort: { createdAt: -1 }, limit: 1 }
-  })
-  .sort({ 'messages.createdAt': -1 })
-*/
-
-module.exports = { createChat, deleteChat };
+module.exports = { createChat, deleteChat, getChats };

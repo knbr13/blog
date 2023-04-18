@@ -45,7 +45,7 @@ const login = async (req, res) => {
 };
 
 const searchUsers = async (req, res) => {
-  const { name, page = 1, limit = 10 } = req.query;
+  const { name, page = 1, limit = 5 } = req.query;
   const skip = (page - 1) * limit;
 
   try {
@@ -72,31 +72,28 @@ const searchUsers = async (req, res) => {
     })
       .skip(skip)
       .limit(parseInt(limit));
-
-    const totalUsers = await User.countDocuments({
-      $and: [
-        {
-          $or: [
-            { firstName: { $regex: `^${name}`, $options: "i" } },
-            { lastName: { $regex: `^${name}`, $options: "i" } },
-            {
-              $expr: {
-                $regexMatch: {
-                  input: { $concat: ["$firstName", " ", "$lastName"] },
-                  regex: new RegExp(`^${name}`, "i"),
+      const totalUsers = await User.countDocuments({
+        $and: [
+          {
+            $or: [
+              { firstName: { $regex: `^${name}`, $options: "i" } },
+              { lastName: { $regex: `^${name}`, $options: "i" } },
+              {
+                $expr: {
+                  $regexMatch: {
+                    input: { $concat: ["$firstName", " ", "$lastName"] },
+                    regex: new RegExp(`^${name}`, "i"),
+                  },
                 },
               },
-            },
-          ],
-        },
-        {
-          _id: { $ne: req.user._id },
-        },
-      ],
-    });
-
-    const totalPages = Math.ceil(totalUsers / limit);
-
+            ],
+          },
+          {
+            _id: { $ne: req.user._id },
+          },
+        ],
+      });
+      const totalPages = Math.ceil(totalUsers / parseInt(limit));
     return res.status(200).json({ users, totalPages });
   } catch (error) {
     return res.status(500).json({ message: "Internal Server Error" });

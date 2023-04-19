@@ -32,6 +32,9 @@ const createChat = async (req, res) => {
       });
       return res.status(201).json(chat);
     }
+    const chatExists = await Chat.findOne({ members: [...uniqueMembers] });
+    if (chatExists)
+      return res.status(400).json({ error: "This chat is already created" });
     chat = await Chat.create({ members: [...uniqueMembers] });
     res.status(201).json(chat);
   } catch (error) {

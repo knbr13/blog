@@ -61,4 +61,29 @@ const getChats = async (req, res) => {
   }
 };
 
-module.exports = { createChat, deleteChat, getChats };
+const updateGroup = async (req, res) => {
+  const { chatId } = req.params;
+  const { members } = req.body;
+  try {
+    const chat = await Chat.findById(chatId);
+    if (!chat.isGroup)
+      return res.status(400).json({
+        error: "this chat is not a group chat, you can delete the whole chat",
+      });
+    if (chat.groupAdmin !== req.user._id)
+      return res
+        .status(401)
+        .json({ error: "you don't have the access the add or delete members" });
+    const newChat = await Chat.findByIdAndUpdate(
+      chatId,
+      { members },
+      { new: true }
+    );
+    res.status(200).json(newChat);
+  } catch (error) {
+    return res.status(500).json({ message: "Internal Server Error" });
+    ``;
+  }
+};
+
+module.exports = { createChat, deleteChat, getChats, updateGroup };

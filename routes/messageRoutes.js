@@ -1,7 +1,11 @@
-const { createMessage, getMessages } = require("../controllers/messageController");
+const {
+  createMessage,
+  getMessages,
+} = require("../controllers/messageController");
 
 const router = require("express").Router();
 
-router.route("/").post(createMessage).get(getMessages);
+router.post("/", createMessage);
+router.get("/:chatId", getMessages);
 
 module.exports = router;

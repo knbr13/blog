@@ -20,7 +20,7 @@ const signup = async (req, res) => {
     const token = user.generateJWTToken();
     res.status(201).json({ user, token });
   } catch (error) {
-    return res.status(500).json({ message: "Internal Server Error" });
+    return res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
@@ -40,7 +40,7 @@ const login = async (req, res) => {
     const token = user.generateJWTToken();
     res.status(201).json({ user, token });
   } catch (error) {
-    return res.status(500).json({ message: "Internal Server Error" });
+    return res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
@@ -96,7 +96,7 @@ const searchUsers = async (req, res) => {
     const totalPages = Math.ceil(totalUsers / parseInt(limit));
     return res.status(200).json({ users, totalPages });
   } catch (error) {
-    return res.status(500).json({ message: "Internal Server Error" });
+    return res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
@@ -111,7 +111,7 @@ const getUser = async (req, res) => {
     const { password, ...otherFields } = user._doc;
     res.status(200).json({ user: otherFields });
   } catch (error) {
-    return res.status(500).json({ message: "Internal Server Error" });
+    return res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
@@ -128,7 +128,7 @@ const updateProfile = async (req, res) => {
     );
     res.status(200).json({ user });
   } catch (error) {
-    return res.status(500).json({ message: "Internal Server Error" });
+    return res.status(500).json({ error: "Internal Server Error" });
   }
 };
 

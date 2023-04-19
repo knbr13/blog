@@ -38,7 +38,7 @@ const createChat = async (req, res) => {
     chat = await Chat.create({ members: [...uniqueMembers] });
     res.status(201).json(chat);
   } catch (error) {
-    return res.status(500).json({ message: "Internal Server Error" });
+    return res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
@@ -49,7 +49,7 @@ const deleteChat = async (req, res) => {
     if (!deletedChat) return res.status(400).json({ error: "no such chat" });
     res.status(200).json(deletedChat);
   } catch (error) {
-    return res.status(500).json({ message: "Internal Server Error" });
+    return res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
@@ -60,7 +60,7 @@ const getChats = async (req, res) => {
     }).sort({ updatedAt: -1 });
     res.status(200).json(chats);
   } catch (error) {
-    return res.status(500).json({ message: "Internal Server Error" });
+    return res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
@@ -84,7 +84,7 @@ const updateGroup = async (req, res) => {
     );
     res.status(200).json(newChat);
   } catch (error) {
-    return res.status(500).json({ message: "Internal Server Error" });
+    return res.status(500).json({ error: "Internal Server Error" });
   }
 };
 

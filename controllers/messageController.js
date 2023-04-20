@@ -1,5 +1,6 @@
 const { default: mongoose } = require("mongoose");
 const Message = require("../models/messageModel");
+const Chat = require("../models/chatModel");
 
 const createMessage = async (req, res) => {
   const { chatId, messageText } = req.body;
@@ -8,11 +9,14 @@ const createMessage = async (req, res) => {
   if (!mongoose.Types.ObjectId.isValid(chatId))
     return res.status(400).json({ error: "Invalid ID" });
   try {
+    const chat = await Chat.findById(chatId);
+    if(!chat) return res.status(404).json({error: "no such chat"});
     const message = await Message.create({
       senderId: req.user._id,
       chatId,
       messageText,
     });
+    await Chat.findByIdAndUpdate(chatId, {lastMessage: Date.now()});
     res.status(201).json(message);
   } catch (error) {
     return res.status(500).json({ error: "Internal Server Error" });

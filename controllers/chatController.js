@@ -2,7 +2,7 @@ const { default: mongoose } = require("mongoose");
 const Chat = require("../models/chatModel");
 
 const createChat = async (req, res) => {
-  const { members, isGroup } = req.body;
+  const { members, name, isGroup } = req.body;
   const uniqueMembers = new Set(members);
   if (
     !uniqueMembers ||
@@ -25,6 +25,7 @@ const createChat = async (req, res) => {
     if (!uniqueMembers.has(req.user._id)) uniqueMembers.add(req.user._id);
     let chat;
     if (isGroup) {
+      if(!name) return res.status(400).json({error: "You must add a group name"});
       chat = await Chat.create({
         members: [...uniqueMembers],
         isGroup,

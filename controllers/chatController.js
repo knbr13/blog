@@ -57,7 +57,14 @@ const getChats = async (req, res) => {
   try {
     const chats = await Chat.find({
       members: { $in: [req.user._id] },
-    }).sort({ updatedAt: -1 });
+    })
+      .sort({ updatedAt: -1 })
+      .populate({
+        path: "members",
+        select: "firstName lastName profilePicture _id",
+        match: { _id: { $ne: req.user._id } },
+      });
+      
     res.status(200).json(chats);
   } catch (error) {
     return res.status(500).json({ error: "Internal Server Error" });

@@ -30,6 +30,7 @@ const createChat = async (req, res) => {
         members: [...uniqueMembers],
         isGroup,
         groupAdmin: req.user._id,
+        name
       });
       return res.status(201).json(chat);
     }

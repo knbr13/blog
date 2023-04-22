@@ -25,12 +25,18 @@ const createChat = async (req, res) => {
     if (!uniqueMembers.has(req.user._id)) uniqueMembers.add(req.user._id);
     let chat;
     if (isGroup) {
-      if(!name) return res.status(400).json({error: "You must add a group name"});
+      if (!name)
+        return res.status(400).json({ error: "You must add a group name" });
       chat = await Chat.create({
         members: [...uniqueMembers],
         isGroup,
         groupAdmin: req.user._id,
-        name
+        name,
+      });
+      chat = await chat.populate({
+        path: "members",
+        select: "firstName lastName profilePicture _id",
+        match: { _id: { $ne: req.user._id } },
       });
       return res.status(201).json(chat);
     }
@@ -38,6 +44,11 @@ const createChat = async (req, res) => {
     if (chatExists)
       return res.status(400).json({ error: "This chat is already created" });
     chat = await Chat.create({ members: [...uniqueMembers] });
+    chat = await chat.populate({
+      path: "members",
+      select: "firstName lastName profilePicture _id",
+      match: { _id: { $ne: req.user._id } },
+    });
     res.status(201).json(chat);
   } catch (error) {
     return res.status(500).json({ error: "Internal Server Error" });
@@ -66,7 +77,7 @@ const getChats = async (req, res) => {
         select: "firstName lastName profilePicture _id",
         match: { _id: { $ne: req.user._id } },
       });
-      
+
     res.status(200).json(chats);
   } catch (error) {
     return res.status(500).json({ error: "Internal Server Error" });

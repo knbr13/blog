@@ -1,6 +1,6 @@
 const { default: mongoose } = require("mongoose");
 
-const moreThanTwoMembers = (req, res, members) => {
+const moreThanTwoMembers = (req, members) => {
   const uniqueMembers = new Set(members);
   if (
     !uniqueMembers ||

@@ -1,28 +1,16 @@
 const { default: mongoose } = require("mongoose");
 const Chat = require("../models/chatModel");
+const { moreThanTwoMembers } = require("../utils/validateGroupMembers");
 
 const createChat = async (req, res) => {
   const { members, name, isGroup } = req.body;
-  const uniqueMembers = new Set(members);
-  if (
-    !uniqueMembers ||
-    !uniqueMembers.size ||
-    (uniqueMembers.has(req.user._id) && uniqueMembers.size === 1)
-  )
-    return res
-      .status(400)
-      .json({ error: "The group should contains at least two members" });
+  let uniqueMembers;
   try {
-    const validSet = new Set(
-      [...uniqueMembers].filter((element) =>
-        mongoose.Types.ObjectId.isValid(element)
-      )
-    );
-    if (validSet.size !== uniqueMembers.size)
-      return res
-        .status(400)
-        .json({ error: "The group should contains at least two members" });
-    if (!uniqueMembers.has(req.user._id)) uniqueMembers.add(req.user._id);
+    uniqueMembers = moreThanTwoMembers(req, members);
+  } catch (error) {
+    return res.status(400).json({ error: error.message });
+  }
+  try {
     let chat;
     if (isGroup) {
       if (!name)
@@ -86,7 +74,13 @@ const getChats = async (req, res) => {
 
 const updateGroup = async (req, res) => {
   const { chatId } = req.params;
-  const { members } = req.body;
+  const { members, name } = req.body;
+  let uniqueMembers;
+  try {
+    uniqueMembers = moreThanTwoMembers(req, members);
+  } catch (error) {
+    return res.status(400).json({ error: error.message });
+  }
   try {
     const chat = await Chat.findById(chatId);
     if (!chat.isGroup)
@@ -99,7 +93,7 @@ const updateGroup = async (req, res) => {
         .json({ error: "you don't have the access the add or delete members" });
     const newChat = await Chat.findByIdAndUpdate(
       chatId,
-      { members },
+      { members: [...uniqueMembers], name },
       { new: true }
     );
     res.status(200).json(newChat);

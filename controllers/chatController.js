@@ -87,7 +87,9 @@ const updateGroup = async (req, res) => {
       return res.status(400).json({
         error: "this chat is not a group chat, you can delete the whole chat",
       });
-    if (chat.groupAdmin !== req.user._id)
+    if (!name)
+      return res.status(400).json({ error: "You must add a group name" });
+    if (chat.groupAdmin != req.user._id)
       return res
         .status(401)
         .json({ error: "you don't have the access the add or delete members" });

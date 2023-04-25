@@ -126,7 +126,7 @@ const updateProfile = async (req, res) => {
       { firstName, lastName, about, profilePicture },
       { new: true }
     );
-    res.status(200).json({ user });
+    res.status(200).json(user);
   } catch (error) {
     return res.status(500).json({ error: "Internal Server Error" });
   }

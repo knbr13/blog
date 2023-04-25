@@ -7,7 +7,8 @@ const chatSchema = mongoose.Schema({
     groupAdmin: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     isGroup: { type: Boolean },
     lastMessage: { type: Date, default: Date.now() },
-    name: String
+    name: String,
+    groupPicture: String
   },
   { timestamps: true }
 );

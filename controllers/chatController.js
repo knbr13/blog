@@ -74,7 +74,7 @@ const getChats = async (req, res) => {
 
 const updateGroup = async (req, res) => {
   const { chatId } = req.params;
-  const { members, name } = req.body;
+  const { members, name, groupPicture } = req.body;
   let uniqueMembers;
   try {
     uniqueMembers = moreThanTwoMembers(req, members);
@@ -95,9 +95,13 @@ const updateGroup = async (req, res) => {
         .json({ error: "you don't have the access the add or delete members" });
     const newChat = await Chat.findByIdAndUpdate(
       chatId,
-      { members: [...uniqueMembers], name },
+      { members: [...uniqueMembers], name, groupPicture },
       { new: true }
-    );
+    ).populate({
+      path: "members",
+      select: "firstName lastName profilePicture _id",
+      match: { _id: { $ne: req.user._id } },
+    });
     res.status(200).json(newChat);
   } catch (error) {
     return res.status(500).json({ error: "Internal Server Error" });

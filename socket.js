@@ -8,11 +8,12 @@ const initSocket = (server) => {
   });
 
   io.on("connection", (socket) => {
-    socket.on("joinRoom", (chatId) => {
+    socket.on("joinRoom", ({chatId}) => {
       socket.join(chatId);
     });
+
     socket.on("publishMessage", ({chatId}) => {
-      socket.to(chatId).emit("receiveMessage");
+      io.to(chatId).emit("receiveMessage", {chatId});
     });
   });
 };

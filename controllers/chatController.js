@@ -62,7 +62,7 @@ const getChats = async (req, res) => {
       .sort({ updatedAt: -1 })
       .populate({
         path: "members",
-        select: "firstName lastName profilePicture _id",
+        select: "firstName lastName profilePicture _id about email",
         match: { _id: { $ne: req.user._id } },
       });
 

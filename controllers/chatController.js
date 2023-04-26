@@ -72,6 +72,21 @@ const getChats = async (req, res) => {
   }
 };
 
+const getChat = async (req, res) => {
+  const { chatId } = req.params;
+  try {
+    const chat = await Chat.findById(chatId).populate({
+      path: "members",
+      select: "firstName lastName profilePicture _id about email",
+      match: { _id: { $ne: req.user._id } },
+    });
+    if (!chat) return res.status(404).json({ error: "No such chat" });
+    res.status(200).json(chat);
+  } catch (error) {
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
 const updateGroup = async (req, res) => {
   const { chatId } = req.params;
   const { members, name, groupPicture } = req.body;
@@ -108,4 +123,4 @@ const updateGroup = async (req, res) => {
   }
 };
 
-module.exports = { createChat, deleteChat, getChats, updateGroup };
+module.exports = { createChat, deleteChat, getChats, updateGroup, getChat };

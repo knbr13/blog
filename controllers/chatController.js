@@ -70,39 +70,6 @@ const deleteChat = async (req, res) => {
   }
 };
 
-// const getChats = async (req, res) => {
-//   try {
-//     let chats = await Chat.find({ members: { $in: [req.user._id] } })
-//       .sort({ updatedAt: -1 })
-//       .populate({
-//         path: "members",
-//         select: "firstName lastName profilePicture _id about email",
-//         match: { _id: { $ne: req.user._id } },
-//       });
-
-//     chats = await Promise.all(
-//       chats.map(async (chat) => {
-//         if (chat.updatedAt.getTime() === chat.createdAt.getTime()) {
-//           return chat;
-//         }
-//         const deletedAt = chat.messagesDeletedAt.filter(
-//           (elem) => elem.userId == req.user._id
-//         )[0].date;
-//         const messages = await messageModel.find({
-//           chatId: chat._id,
-//           createdAt: { $gt: deletedAt },
-//         });
-//         if (messages.length) return chat;
-//       })
-//     );
-
-//     res.status(200).json(chats);
-//   } catch (error) {
-//     console.log(error);
-//     return res.status(500).json({ error: "Internal Server Error" });
-//   }
-// };
-
 const getChats = async (req, res) => {
   try {
     let chats = await Chat.find({ members: { $in: [req.user._id] } })

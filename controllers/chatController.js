@@ -7,6 +7,7 @@ const createChat = async (req, res) => {
   let uniqueMembers;
   try {
     uniqueMembers = moreThanTwoMembers(req, members);
+    uniqueMembers = [...uniqueMembers];
   } catch (error) {
     return res.status(400).json({ error: error.message });
   }
@@ -15,11 +16,19 @@ const createChat = async (req, res) => {
     if (isGroup) {
       if (!name)
         return res.status(400).json({ error: "You must add a group name" });
+      const messagesDeletedAt = uniqueMembers.map((member) => ({
+        userId: member
+      }));
       chat = await Chat.create({
-        members: [...uniqueMembers],
+        members: uniqueMembers,
+        messagesDeletedAt,
+      });
+      chat = await Chat.create({
+        members: uniqueMembers,
         isGroup,
         groupAdmin: req.user._id,
         name,
+        messagesDeletedAt,
       });
       chat = await chat.populate({
         path: "members",
@@ -28,10 +37,16 @@ const createChat = async (req, res) => {
       });
       return res.status(201).json(chat);
     }
-    const chatExists = await Chat.findOne({ members: [...uniqueMembers] });
+    const chatExists = await Chat.findOne({ members: uniqueMembers });
     if (chatExists)
       return res.status(400).json({ error: "This chat is already created" });
-    chat = await Chat.create({ members: [...uniqueMembers] });
+    const messagesDeletedAt = uniqueMembers.map((member) => ({
+      userId: member
+    }));
+    chat = await Chat.create({
+      members: uniqueMembers,
+      messagesDeletedAt,
+    });
     chat = await chat.populate({
       path: "members",
       select: "firstName lastName profilePicture _id",

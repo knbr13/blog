@@ -103,6 +103,26 @@ const getChats = async (req, res) => {
   }
 };
 
+const clearChat = async (req, res) => {
+  const { chatId } = req.params;
+  if (!mongoose.Types.ObjectId.isValid(chatId))
+    return res.status(400).json({ error: "Invalid Id" });
+  try {
+    let chat = await Chat.findById(chatId);
+    const userIndex = chat.messagesDeletedAt.findIndex(
+      (user) => user.userId == req.user._id
+    );
+    if (userIndex >= 0) {
+      chat.messagesDeletedAt[userIndex].date = Date.now();
+      await chat.save();
+    }
+    res.status(200).json(chat);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
 const getChat = async (req, res) => {
   const { chatId } = req.params;
   try {
@@ -154,4 +174,11 @@ const updateGroup = async (req, res) => {
   }
 };
 
-module.exports = { createChat, deleteChat, getChats, updateGroup, getChat };
+module.exports = {
+  createChat,
+  deleteChat,
+  getChats,
+  updateGroup,
+  getChat,
+  clearChat,
+};

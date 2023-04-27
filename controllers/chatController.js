@@ -22,10 +22,6 @@ const createChat = async (req, res) => {
       }));
       chat = await Chat.create({
         members: uniqueMembers,
-        messagesDeletedAt,
-      });
-      chat = await Chat.create({
-        members: uniqueMembers,
         isGroup,
         groupAdmin: req.user._id,
         name,

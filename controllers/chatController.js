@@ -1,6 +1,7 @@
 const { default: mongoose } = require("mongoose");
 const Chat = require("../models/chatModel");
 const { moreThanTwoMembers } = require("../utils/validateGroupMembers");
+const messageModel = require("../models/messageModel");
 
 const createChat = async (req, res) => {
   const { members, name, isGroup } = req.body;
@@ -17,7 +18,7 @@ const createChat = async (req, res) => {
       if (!name)
         return res.status(400).json({ error: "You must add a group name" });
       const messagesDeletedAt = uniqueMembers.map((member) => ({
-        userId: member
+        userId: member,
       }));
       chat = await Chat.create({
         members: uniqueMembers,
@@ -41,7 +42,7 @@ const createChat = async (req, res) => {
     if (chatExists)
       return res.status(400).json({ error: "This chat is already created" });
     const messagesDeletedAt = uniqueMembers.map((member) => ({
-      userId: member
+      userId: member,
     }));
     chat = await Chat.create({
       members: uniqueMembers,
@@ -71,9 +72,7 @@ const deleteChat = async (req, res) => {
 
 const getChats = async (req, res) => {
   try {
-    const chats = await Chat.find({
-      members: { $in: [req.user._id] },
-    })
+    let chats = await Chat.find({ members: { $in: [req.user._id] } })
       .sort({ updatedAt: -1 })
       .populate({
         path: "members",
@@ -81,8 +80,25 @@ const getChats = async (req, res) => {
         match: { _id: { $ne: req.user._id } },
       });
 
+    chats = await Promise.all(
+      chats.map(async (chat) => {
+        if (chat.updatedAt.getTime() === chat.createdAt.getTime()) {
+          return chat;
+        }
+        const deletedAt = chat.messagesDeletedAt.filter(
+          (elem) => elem.userId == req.user._id
+        )[0].date;
+        const messages = await messageModel.find({
+          chatId: chat._id,
+          createdAt: { $gt: deletedAt },
+        });
+        if (messages.length) return chat;
+      })
+    );
+
     res.status(200).json(chats);
   } catch (error) {
+    console.log(error);
     return res.status(500).json({ error: "Internal Server Error" });
   }
 };

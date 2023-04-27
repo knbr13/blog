@@ -34,7 +34,7 @@ const createChat = async (req, res) => {
       });
       return res.status(201).json(chat);
     }
-    const chatExists = await Chat.findOne({ members: uniqueMembers });
+    const chatExists = await Chat.findOne({ members: { $all: uniqueMembers} });
     if (chatExists)
       return res.status(400).json({ error: "This chat is already created" });
     const messagesDeletedAt = uniqueMembers.map((member) => ({
@@ -75,10 +75,9 @@ const getChats = async (req, res) => {
         select: "firstName lastName profilePicture _id about email",
         match: { _id: { $ne: req.user._id } },
       });
-
     const updatedChats = [];
     for (const chat of chats) {
-      if (chat.updatedAt.getTime() === chat.createdAt.getTime()) {
+      if (chat.lastMessage.getTime() === chat.createdAt.getTime()) {
         updatedChats.push(chat);
       } else {
         const deletedAt = chat.messagesDeletedAt.filter(

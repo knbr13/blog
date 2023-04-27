@@ -20,7 +20,7 @@ const chatSchema = mongoose.Schema(
           },
           date: {
             type: Date,
-            default: Date.now(),
+            default: new Date(2002, 5, 5, 0, 0, 0),
           },
         },
       ],

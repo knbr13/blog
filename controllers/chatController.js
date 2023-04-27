@@ -77,7 +77,8 @@ const getChats = async (req, res) => {
       });
     const updatedChats = [];
     for (const chat of chats) {
-      if (chat.lastMessage.getTime() === chat.createdAt.getTime()) {
+      console.log(chat.lastMessage.getTime(), chat.createdAt.getTime())
+      if (chat.lastMessage.getTime() < chat.createdAt.getTime() || chat.isGroup) {
         updatedChats.push(chat);
       } else {
         const deletedAt = chat.messagesDeletedAt.filter(

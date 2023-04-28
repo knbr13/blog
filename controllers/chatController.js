@@ -84,6 +84,7 @@ const getChats = async (req, res) => {
         match: { _id: { $ne: req.user._id } },
       });
     const updatedChats = [];
+    const clearedChats = [];
     for (const chat of chats) {
       if (
         (chat.lastMessage.getTime() < chat.createdAt.getTime() &&
@@ -101,11 +102,13 @@ const getChats = async (req, res) => {
         });
         if (messages.length) {
           updatedChats.push(chat);
+        } else {
+          clearedChats.push(chat._id);
         }
       }
     }
 
-    res.status(200).json(updatedChats);
+    res.status(200).json({updatedChats, clearedChats});
   } catch (error) {
     console.log(error);
     return res.status(500).json({ error: "Internal Server Error" });

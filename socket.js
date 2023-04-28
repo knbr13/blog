@@ -24,6 +24,12 @@ const initSocket = (server) => {
       socket.to(chatId).emit("groupDeleted", { adminName, chatName, chatId });
     });
 
+    socket.on("updateGroup", ({ members, groupId }) => {
+      members.forEach((member) =>
+        socket.to(member).emit("groupUpdated", { groupId })
+      );
+    });
+
     socket.on("publishMessage", ({ chatId, name }) => {
       io.to(chatId).emit("receiveMessage", { chatId });
       socket.to(chatId).emit("notification", { name, chatId });

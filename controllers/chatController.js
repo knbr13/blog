@@ -60,6 +60,8 @@ const createChat = async (req, res) => {
 
 const deleteChat = async (req, res) => {
   const { chatId } = req.params;
+  if (!mongoose.Types.ObjectId.isValid(chatId))
+    return res.status(400).json({ error: "Invalid Id" });
   try {
     let deletedChat = await Chat.findById(chatId);
     if (deletedChat.isGroup && deletedChat.groupAdmin != req.user._id)
@@ -132,6 +134,8 @@ const clearChat = async (req, res) => {
 
 const getChat = async (req, res) => {
   const { chatId } = req.params;
+  if (!mongoose.Types.ObjectId.isValid(chatId))
+    return res.status(400).json({ error: "Invalid Id" });
   try {
     const chat = await Chat.findById(chatId).populate({
       path: "members",
@@ -147,6 +151,8 @@ const getChat = async (req, res) => {
 
 const updateGroup = async (req, res) => {
   const { chatId } = req.params;
+  if (!mongoose.Types.ObjectId.isValid(chatId))
+    return res.status(400).json({ error: "Invalid Id" });
   const { members, name, groupPicture } = req.body;
   let uniqueMembers;
   try {

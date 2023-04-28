@@ -178,6 +178,27 @@ const updateGroup = async (req, res) => {
   }
 };
 
+const leaveGroup = async (req, res) => {
+  const { chatId } = req.params;
+  if (!mongoose.Types.ObjectId.isValid(chatId))
+    return res.status(400).json({ error: "Invalid Id" });
+  try {
+    const chat = await Chat.findById(chatId);
+    if (!chat) return res.status(404).json({ error: "No such chat" });
+    if (!chat.isGroup)
+      return res.status(400).jso({ error: "This chat isn't a group chat" });
+    if (chat.groupAdmin == req.user._id)
+      return res
+        .status(400)
+        .json({ error: "You are the admin! You can delete this chat instead" });
+    chat.members = chat.members.filter((user) => user._id != req.user._id);
+    await chat.save();
+    res.status(200).json(chat);
+  } catch (error) {
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
 module.exports = {
   createChat,
   deleteChat,
@@ -185,4 +206,5 @@ module.exports = {
   updateGroup,
   getChat,
   clearChat,
+  leaveGroup,
 };

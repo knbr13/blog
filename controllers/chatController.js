@@ -61,7 +61,10 @@ const createChat = async (req, res) => {
 const deleteChat = async (req, res) => {
   const { chatId } = req.params;
   try {
-    const deletedChat = await Chat.findByIdAndDelete(chatId);
+    let deletedChat = await Chat.findById(chatId);
+    if (deletedChat.isGroup && deletedChat.groupAdmin != req.user._id)
+      return res.status(403).json({ error: "You are not the group admin!" });
+    deletedChat = await Chat.findByIdAndDelete(chatId);
     if (!deletedChat) return res.status(400).json({ error: "no such chat" });
     res.status(200).json(deletedChat);
   } catch (error) {

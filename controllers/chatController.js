@@ -108,9 +108,8 @@ const getChats = async (req, res) => {
       }
     }
 
-    res.status(200).json({updatedChats, clearedChats});
+    res.status(200).json({ updatedChats, clearedChats });
   } catch (error) {
-    console.log(error);
     return res.status(500).json({ error: "Internal Server Error" });
   }
 };
@@ -130,7 +129,6 @@ const clearChat = async (req, res) => {
     }
     res.status(200).json(chat);
   } catch (error) {
-    console.log(error);
     return res.status(500).json({ error: "Internal Server Error" });
   }
 };

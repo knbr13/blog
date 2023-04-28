@@ -20,5 +20,5 @@ app.use("/chat", authMiddleware, chatRoutes);
 app.use("/message", authMiddleware, messageRoutes);
 
 require("./db")().then(() => {
-  httpServer.listen(process.env.PORT, () => console.log("the server is up"));
+  httpServer.listen(process.env.PORT);
 });

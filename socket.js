@@ -20,6 +20,10 @@ const initSocket = (server) => {
       socket.join(chatId);
     });
 
+    socket.on("deleteGroup", ({ chatId, adminName, chatName }) => {
+      socket.to(chatId).emit("groupDeleted", { adminName, chatName, chatId });
+    });
+
     socket.on("publishMessage", ({ chatId, name }) => {
       io.to(chatId).emit("receiveMessage", { chatId });
       socket.to(chatId).emit("notification", { name, chatId });

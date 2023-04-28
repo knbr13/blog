@@ -34,7 +34,10 @@ const createChat = async (req, res) => {
       });
       return res.status(201).json(chat);
     }
-    const chatExists = await Chat.findOne({ members: { $all: uniqueMembers} });
+    const chatExists = await Chat.findOne({
+      members: { $all: uniqueMembers },
+      isGroup: false,
+    });
     if (chatExists)
       return res.status(400).json({ error: "This chat is already created" });
     const messagesDeletedAt = uniqueMembers.map((member) => ({
@@ -77,7 +80,11 @@ const getChats = async (req, res) => {
       });
     const updatedChats = [];
     for (const chat of chats) {
-      if (chat.lastMessage.getTime() < chat.createdAt.getTime() || chat.isGroup) {
+      if (
+        (chat.lastMessage.getTime() < chat.createdAt.getTime() &&
+          chat.createdAt.getTime() == chat.updatedAt.getTime()) ||
+        chat.isGroup
+      ) {
         updatedChats.push(chat);
       } else {
         const deletedAt = chat.messagesDeletedAt.filter(
@@ -110,7 +117,7 @@ const clearChat = async (req, res) => {
       (user) => user.userId == req.user._id
     );
     if (userIndex >= 0) {
-      chat.messagesDeletedAt[userIndex].date = Date.now();
+      chat.messagesDeletedAt[userIndex].date = new Date();
       await chat.save();
     }
     res.status(200).json(chat);

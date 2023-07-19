@@ -3,14 +3,11 @@ package main
 import (
 	"fmt"
 	"github.com/manifoldco/promptui"
-	"time"
 )
 
 func main() {
 	arr := generateRandomArray(10)
 	fmt.Println("Initial array:", arr)
-	time.Sleep(time.Second) // Pause for visualization
-	clearConsole()
 
 	// Prompt user to select the sorting algorithm
 	prompt := promptui.Select{
@@ -23,6 +20,8 @@ func main() {
 		fmt.Printf("Prompt failed %v\n", err)
 		return
 	}
+
+	clearConsole()
 
 	switch algorithm {
 	case "Bubble Sort":

@@ -2,6 +2,14 @@ package main
 
 import "time"
 
+func main() {
+	arr := []int{5, 2, 8, 3, 9, 8, 1, 3, 7, 4}
+	quickSort(arr, time.Microsecond)
+	for _, v := range arr {
+		println(v)
+	}
+}
+
 func quickSort(arr []int, delay time.Duration) {
 	if len(arr) <= 1 {
 		return

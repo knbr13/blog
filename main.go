@@ -8,8 +8,10 @@ import (
 var visualization = [][][]int{}
 
 func main() {
-	arr := []int{5, 2, 8, 3, 9, 8, 1, 3, 7, 4}
+	arr := []int{5, 2, 8, 3}
 	visualization = append(visualization, append([][]int{}, arr))
+	fmt.Println(visualization)
+	time.Sleep(time.Second)
 	quickSort(&arr, time.Microsecond)
 	for _, v := range arr {
 		fmt.Println(v)
@@ -37,6 +39,8 @@ func quickSort(arr *[]int, delay time.Duration) {
 	if len(visualization) <= m {
 		visualization = append(visualization, append([][]int{}, x))
 	}
+	fmt.Println(visualization)
+	time.Sleep(time.Second)
 	visualization[m] = append(visualization[m], x, append([]int{}, pivot))
 	m++
 	quickSort(&x, delay)
@@ -45,5 +49,12 @@ func quickSort(arr *[]int, delay time.Duration) {
 	}
 	visualization[n] = append(visualization[n], y, append([]int{}, pivot))
 	n++
+	fmt.Println(visualization)
+	time.Sleep(time.Second)
 	quickSort(&y, delay)
+}
+
+func printAndDelay(x interface{}, delay time.Duration) {
+	fmt.Println(x)
+    time.Sleep(delay)
 }

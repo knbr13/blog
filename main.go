@@ -28,6 +28,7 @@ func quickSort(arr *[]int, delay time.Duration) {
 	(*arr)[i+1], (*arr)[len((*arr))-1] = (*arr)[len((*arr))-1], (*arr)[i+1]
 	x := (*arr)[:i+1]
 	y := (*arr)[i+2:]
-	go quickSort(&x, delay)
-	go quickSort(&y, delay)
+	quickSort(&x, delay)
+	quickSort(&y, delay)
 }
+

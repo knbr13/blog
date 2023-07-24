@@ -40,7 +40,17 @@ func quickSort(arr *[]int, delay time.Duration) {
 	(*arr)[i+1], (*arr)[len((*arr))-1] = (*arr)[len((*arr))-1], (*arr)[i+1]
 	x := (*arr)[:i+1]
 	y := (*arr)[i+2:]
+	if len(visualization) <= m {
+		visualization = append(visualization, []interface{}{})
+	}
+	visualization[m] = append(visualization[m], x, pivot)
+	m++
 	quickSort(&x, delay)
+	if len(visualization) <= n {
+		visualization = append(visualization, []interface{}{})
+	}
+	visualization[n] = append(visualization[n], y)
+	n++
 	quickSort(&y, delay)
 }
 

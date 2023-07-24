@@ -76,6 +76,7 @@ var visualization = [][]Element{}
 
 func main() {
 	arr := []int{5, 2, 8, 3}
+	fmt.Println("Initial array: ", arr)
 	visualization = append(visualization, makeVisualizationArray(arr, ""))
 	quickSort(&arr, time.Millisecond*500)
 	for _, v := range arr {

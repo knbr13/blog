@@ -5,7 +5,14 @@ import (
 	"time"
 )
 
-var visualization = [][][]int{}
+var visualization = [][]interface{}{}
+
+/*
+	[
+		[[1, 4, 2 , 7, 3],2,[3, 32, 5 ,2 ,7]],
+        [[1, 4, 2 , 7, 3],2,[3, 32], 5, [2 ,7],
+	]
+*/
 
 func main() {
 	arr := []int{5, 2, 8, 3}

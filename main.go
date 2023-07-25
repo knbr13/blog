@@ -17,11 +17,11 @@ var visualization = [][]interface{}{}
 func main() {
 	arr := []int{5, 2, 8, 3}
 	visualization = append(visualization, append([]interface{}{}, arr))
-	quickSort(&arr, time.Microsecond)
-	for _, v := range arr {
-		fmt.Println(v)
-	}
-	fmt.Println(visualization)
+	fmt.Println("visualization: ", visualization)
+	visualization = append(visualization, []interface{}{})
+	visualization[1] = append(visualization[1], []interface{}{1, 2, 3, 888888, []int{12, 53}})
+	// quickSort(&arr, time.Microsecond)
+	fmt.Println("final results: ", visualization)
 }
 
 func quickSort(arr *[]int, delay time.Duration) {
@@ -31,6 +31,7 @@ func quickSort(arr *[]int, delay time.Duration) {
 		return
 	}
 	pivot := (*arr)[len((*arr))-1]
+	fmt.Println("pivot: ", pivot)
 	i, j := -1, 0
 	for ; j < len((*arr)); j++ {
 		if (*arr)[j] < pivot {
@@ -41,18 +42,15 @@ func quickSort(arr *[]int, delay time.Duration) {
 	(*arr)[i+1], (*arr)[len((*arr))-1] = (*arr)[len((*arr))-1], (*arr)[i+1]
 	x := (*arr)[:i+1]
 	y := (*arr)[i+2:]
-	if len(visualization) <= m {
+	fmt.Println("y: ", y)
+	if len(visualization) <= m && len(x) > 0 {
 		visualization = append(visualization, []interface{}{})
-	}
-	if len(x) > 0 {
 		visualization[m] = append(visualization[m], x, pivot)
 		m++
 	}
 	quickSort(&x, delay)
-	if len(visualization) <= n {
+	if len(visualization) <= n && len(y) > 0 {
 		visualization = append(visualization, []interface{}{})
-	}
-	if len(y) > 0 {
 		visualization[n] = append(visualization[n], y)
 		n++
 	}

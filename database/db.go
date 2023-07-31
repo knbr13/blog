@@ -20,19 +20,19 @@ func Connect() (*sql.DB, error) {
 		return nil, err
 	}
 
-	query := `
-    CREATE TABLE users (
-        id INT AUTO_INCREMENT,
-        username TEXT NOT NULL,
-        password TEXT NOT NULL,
-        created_at DATETIME,
-        PRIMARY KEY (id)
-    );`
+	// query := `
+	// CREATE TABLE users (
+	//     id INT AUTO_INCREMENT,
+	//     username TEXT NOT NULL,
+	//     password TEXT NOT NULL,
+	//     created_at DATETIME,
+	//     PRIMARY KEY (id)
+	// );`
 
-	_, err = db.Exec(query)
-	if err != nil {
-		return nil, err
-	}
+	// _, err = db.Exec(query)
+	// if err != nil {
+	// 	return nil, err
+	// }
 
 	username := "johndoe"
 	password := "secret"
@@ -54,8 +54,8 @@ func Connect() (*sql.DB, error) {
 		queried_createdAt time.Time
 	)
 
-	query = `SELECT id, username, password, created_at FROM users WHERE id = ?`
-	err = db.QueryRow(query, 1).Scan(&queried_id, &queried_username, &queried_password, &queried_createdAt)
+	query := `SELECT id, username, password, created_at FROM users WHERE id = ?`
+	err = db.QueryRow(query, 4).Scan(&queried_id, &queried_username, &queried_password, &queried_createdAt)
 	if err != nil {
 		return nil, err
 	}
@@ -63,5 +63,32 @@ func Connect() (*sql.DB, error) {
 	fmt.Println("userName: ", queried_username)
 	fmt.Println("password: ", queried_password)
 	fmt.Println("createdAt: ", queried_createdAt)
+
+	type user struct {
+		id        int
+		username  string
+		password  string
+		createdAt time.Time
+	}
+
+	rows, err := db.Query("SELECT id, username, password, created_at FROM users")
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var users []user
+	for rows.Next() {
+		var u user
+		err = rows.Scan(&u.id, &u.username, &u.password, &u.createdAt)
+		users = append(users, u)
+	}
+	if err != nil {
+		return nil, err
+	}
+	err = rows.Err()
+	if err != nil {
+		return nil, err
+	}
+	fmt.Println("users:", users)
 	return db, nil
 }

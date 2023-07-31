@@ -90,5 +90,10 @@ func Connect() (*sql.DB, error) {
 		return nil, err
 	}
 	fmt.Println("users:", users)
+	query = "DELETE FROM users WHERE id = ?"
+	_, err = db.Exec(query, 1)
+	if err != nil {
+		return nil, err
+	}
 	return db, nil
 }

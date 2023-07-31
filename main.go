@@ -7,6 +7,6 @@ import (
 
 func main() {
 	fs := http.FileServer(http.Dir("static/"))
-	http.Handle("/static/", http.StripPrefix("/static/", fs))
-	log.Fatal(http.ListenAndServe(":80", nil))
+	http.Handle("/public/", http.StripPrefix("/public/", fs))
+	log.Fatal(http.ListenAndServe(":8000", nil))
 }

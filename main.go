@@ -35,7 +35,7 @@ func main() {
 		tmpl.Execute(w, data)
 	})
 
-	http.HandleFunc("/form", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/form/", func(w http.ResponseWriter, r *http.Request) {
 		tmpl := template.Must(template.ParseFiles("static/forms.html"))
 		if r.Method != http.MethodPost {
 			tmpl.Execute(w, nil)
@@ -51,7 +51,7 @@ func main() {
 		tmpl.Execute(w, struct {
 			Success bool
 			ContactDetails
-		}{true, ContactDetails{Email: details.Email, Subject: details.Email, Message: details.Subject}})
+		}{true, ContactDetails{Email: details.Email, Subject: details.Subject, Message: details.Message}})
 	})
 	http.ListenAndServe(":8080", nil)
 }

@@ -34,9 +34,9 @@ func main() {
 		}
 		tmpl.Execute(w, data)
 	})
-	tmpl = template.Must(template.ParseFiles("forms.html"))
 
 	http.HandleFunc("/form", func(w http.ResponseWriter, r *http.Request) {
+		tmpl = template.Must(template.ParseFiles("static/forms.html"))
 		if r.Method != http.MethodPost {
 			tmpl.Execute(w, nil)
 			return

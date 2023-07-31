@@ -1,7 +1,9 @@
 package main
 
 import (
+	"fmt"
 	"html/template"
+	"log"
 	"net/http"
 )
 
@@ -53,5 +55,22 @@ func main() {
 			ContactDetails
 		}{true, ContactDetails{Email: details.Email, Subject: details.Subject, Message: details.Message}})
 	})
+	http.HandleFunc("/foo", logging(foo))
+	http.HandleFunc("/bar", logging(bar))
 	http.ListenAndServe(":8080", nil)
+}
+
+func logging(f http.HandlerFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		log.Println(r.URL.Path)
+		f(w, r)
+	}
+}
+
+func foo(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintln(w, "foo")
+}
+
+func bar(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintln(w, "bar")
 }

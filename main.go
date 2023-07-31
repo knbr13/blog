@@ -22,8 +22,8 @@ type ContactDetails struct {
 }
 
 func main() {
-	tmpl := template.Must(template.ParseFiles("static/index.html"))
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		tmpl := template.Must(template.ParseFiles("static/index.html"))
 		data := TodoPageData{
 			PageTitle: "My TODO list",
 			Todos: []Todo{

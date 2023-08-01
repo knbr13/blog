@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"time"
@@ -8,6 +9,10 @@ import (
 
 func main() {
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {})
+}
+
+func sayHello(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "hello world")
 }
 
 type Middleware func(http.HandlerFunc) http.HandlerFunc

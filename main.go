@@ -7,19 +7,15 @@ import (
 )
 
 func main() {
-
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {})
 }
 
 type Middleware func(http.HandlerFunc) http.HandlerFunc
 
-func logging() Middleware {
-	return func(hf http.HandlerFunc) http.HandlerFunc {
-		return func(w http.ResponseWriter, r *http.Request) {
-			start := time.Now()
-			defer func() {
-				log.Println(r.URL.Path, time.Since(start))
-			}()
-			hf(w, r)
-		}
+func logging(f http.HandlerFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		start := time.Now()
+		defer func() { log.Println(time.Since(start)) }()
+		f(w, r)
 	}
 }

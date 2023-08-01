@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {})
+	// http.HandleFunc("/", chain(sayHello, logging, ))
 }
 
 func sayHello(w http.ResponseWriter, r *http.Request) {
@@ -25,12 +25,15 @@ func logging(f http.HandlerFunc) http.HandlerFunc {
 	}
 }
 
-func method(name string, f http.HandlerFunc) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		if r.Method != name {
-			return
+func method(name string) Middleware {
+	return func(f http.HandlerFunc) http.HandlerFunc {
+		return func(w http.ResponseWriter, r *http.Request) {
+			if r.Method != name {
+				http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+				return
+			}
+			f(w, r)
 		}
-		f(w, r)
 	}
 }
 

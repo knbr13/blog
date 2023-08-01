@@ -28,3 +28,10 @@ func method(name string, f http.HandlerFunc) http.HandlerFunc {
 		f(w, r)
 	}
 }
+
+func chain(f http.HandlerFunc, mds ...Middleware) http.HandlerFunc {
+	for _, md := range mds {
+		f = md(f)
+	}
+	return f
+}

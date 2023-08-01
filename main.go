@@ -19,3 +19,12 @@ func logging(f http.HandlerFunc) http.HandlerFunc {
 		f(w, r)
 	}
 }
+
+func method(name string, f http.HandlerFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != name {
+			return
+		}
+		f(w, r)
+	}
+}

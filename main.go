@@ -18,5 +18,15 @@ func main() {
 		json.NewDecoder(r.Body).Decode(user)
 		fmt.Fprintf(w, "%s %s is %d years old!", user.FirstName, user.LastName, user.Age)
 	})
+
+	http.HandleFunc("/encode/", func(w http.ResponseWriter, r *http.Request) {
+		user := &User{
+			FirstName: "Jane",
+			LastName:  "Eyre",
+			Age:       21,
+		}
+		json.NewEncoder(w).Encode(user)
+	})
+
 	http.ListenAndServe(":8080", nil)
 }

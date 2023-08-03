@@ -1,31 +1,37 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/http"
+
+	"github.com/gorilla/websocket"
 )
 
-type User struct {
-	FirstName string `json:"firstname"`
-	LastName  string `json:"lastname"`
-	Age       int    `json:"age"`
+var upgrader = websocket.Upgrader{
+	ReadBufferSize:  1024,
+	WriteBufferSize: 1024,
 }
 
 func main() {
-	http.HandleFunc("/decode/", func(w http.ResponseWriter, r *http.Request) {
-		var user *User
-		json.NewDecoder(r.Body).Decode(user)
-		fmt.Fprintf(w, "%s %s is %d years old!", user.FirstName, user.LastName, user.Age)
+	http.HandleFunc("/echo", func(w http.ResponseWriter, r *http.Request) {
+		conn, _ := upgrader.Upgrade(w, r, nil)
+
+		for {
+			msgType, msg, err := conn.ReadMessage()
+			if err != nil {
+				return
+			}
+
+			fmt.Printf("%s sent: %s\n", conn.RemoteAddr(), string(msg))
+
+			if err = conn.WriteMessage(msgType, msg); err != nil {
+				return
+			}
+		}
 	})
 
-	http.HandleFunc("/encode/", func(w http.ResponseWriter, r *http.Request) {
-		user := &User{
-			FirstName: "Jane",
-			LastName:  "Eyre",
-			Age:       21,
-		}
-		json.NewEncoder(w).Encode(user)
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "websockets.html")
 	})
 
 	http.ListenAndServe(":8080", nil)

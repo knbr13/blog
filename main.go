@@ -31,7 +31,7 @@ func main() {
 	})
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, "websockets.html")
+		http.ServeFile(w, r, "static/websockets.html")
 	})
 
 	http.ListenAndServe(":8080", nil)

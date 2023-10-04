@@ -1,35 +1,19 @@
 package main
 
-import "fmt"
+import (
+	"log"
+	"net/http"
 
-func dedupLettersAndLexicographicOrder(s string) string {
-	index := make([]bool, 26)
-	for _, r := range s {
-		if i := r - 'a'; !index[i] {
-			index[i] = true
-		}
-	}
-
-	res := make([]rune, 0, len(index))
-	for i, ok := range index {
-		if ok {
-			res = append(res, rune(i+'a'))
-		}
-	}
-
-	return string(res)
-}
+	"github.com/gorilla/mux"
+)
 
 func main() {
-	rubric := map[string]string{
-		"aaaaaaabdeeeecfff": "abcdef",
-		"bbbefffghaaaaaaa":  "abefgh",
-	}
+	router := mux.NewRouter()
 
-	for input, want := range rubric {
-		got := dedupLettersAndLexicographicOrder(input)
-		if got != want {
-			fmt.Printf("%q =>\n\tGot:  %q\n\tWant: %q", input, got, want)
-		}
-	}
+	router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte("hello world\n"))
+	})
+
+	log.Println("starting the server...")
+	log.Fatalln(http.ListenAndServe(":8080", router))
 }

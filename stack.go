@@ -6,7 +6,7 @@ func New[T any]() *stack[T] {
 	return &stack[T]{}
 }
 
-func (s *stack[T]) Add(v T) {
+func (s *stack[T]) Push(v T) {
 	*s = append(*s, v)
 }
 

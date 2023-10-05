@@ -27,3 +27,7 @@ func (s *stack[T]) Peek() *T {
 	}
 	return &(*s)[s.Len()]
 }
+
+func (s *stack[T]) Clear() {
+	*s = (*s)[:0]
+}

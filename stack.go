@@ -9,3 +9,5 @@ func New[T any]() *Stack[T] {
 func (s *Stack[T]) Add(v T) {
 	*s = append(*s, v)
 }
+
+func (s *Stack[T]) Len() int { return len(*s) }

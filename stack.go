@@ -1,13 +1,13 @@
 package main
 
-type Stack[T any] []any
+type stack[T any] []any
 
-func New[T any]() *Stack[T] {
-	return &Stack[T]{}
+func New[T any]() *stack[T] {
+	return &stack[T]{}
 }
 
-func (s *Stack[T]) Add(v T) {
+func (s *stack[T]) Add(v T) {
 	*s = append(*s, v)
 }
 
-func (s *Stack[T]) Len() int { return len(*s) }
+func (s *stack[T]) Len() int { return len(*s) }

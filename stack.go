@@ -25,7 +25,7 @@ func (s *stack[T]) Peek() *T {
 	if s.Len() == 0 {
 		return nil
 	}
-	return &(*s)[s.Len()]
+	return &(*s)[s.Len()-1]
 }
 
 func (s *stack[T]) Clear() {

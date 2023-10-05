@@ -20,3 +20,10 @@ func (s *stack[T]) Pop() *T {
 	*s = (*s)[:s.Len()-1]
 	return &deleted
 }
+
+func (s *stack[T]) Peek() *T {
+	if s.Len() == 0 {
+		return nil
+	}
+	return &(*s)[s.Len()]
+}

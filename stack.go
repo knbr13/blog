@@ -1,6 +1,6 @@
 package main
 
-type stack[T any] []any
+type stack[T any] []T
 
 func New[T any]() *stack[T] {
 	return &stack[T]{}

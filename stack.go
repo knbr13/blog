@@ -31,3 +31,7 @@ func (s *stack[T]) Peek() *T {
 func (s *stack[T]) Clear() {
 	*s = (*s)[:0]
 }
+
+func (s *stack[T]) Empty() bool {
+	return s.Len() == 0
+}

@@ -1,6 +1,34 @@
 package main
 
+import (
+	"fmt"
+	"strings"
+)
+
 type stack[T any] []T
+
+func (s *stack[T]) String() string {
+	var sb strings.Builder
+	sb.WriteString("|")
+	for i := len(*s) - 1; i >= 0; i-- {
+		sb.WriteString(fmt.Sprintf("%v, ", (*s)[i]))
+	}
+	sb.WriteString("|\n")
+	str := sb.String()
+	sb.Reset()
+	sb.WriteString("|")
+	for i := len(str) - 4; i >= 0; i-- {
+		sb.WriteString("-")
+	}
+	sb.WriteString("|\n")
+	sb.WriteString(str)
+	sb.WriteString("|")
+	for i := len(str) - 4; i >= 0; i-- {
+		sb.WriteString("-")
+	}
+	sb.WriteString("|\n")
+	return sb.String()
+}
 
 func New[T any]() *stack[T] {
 	return &stack[T]{}

@@ -9,24 +9,19 @@ type stack[T any] []T
 
 func (s *stack[T]) String() string {
 	var sb strings.Builder
-	sb.WriteString("|")
+
+	sb.WriteString(strings.Repeat("—", s.MaxLen()+4))
+	sb.WriteString("\n")
+
 	for i := len(*s) - 1; i >= 0; i-- {
-		sb.WriteString(fmt.Sprintf("%v, ", (*s)[i]))
+		sb.WriteString("|")
+		sb.WriteString(fmt.Sprintf(" %v ", (*s)[i]))
+		sb.WriteString("|\n")
 	}
-	sb.WriteString("|\n")
-	str := sb.String()
-	sb.Reset()
-	sb.WriteString("|")
-	for i := len(str) - 4; i >= 0; i-- {
-		sb.WriteString("-")
-	}
-	sb.WriteString("|\n")
-	sb.WriteString(str)
-	sb.WriteString("|")
-	for i := len(str) - 4; i >= 0; i-- {
-		sb.WriteString("-")
-	}
-	sb.WriteString("|\n")
+
+	sb.WriteString(strings.Repeat("—", s.MaxLen()+4))
+	sb.WriteString("\n")
+
 	return sb.String()
 }
 
@@ -62,4 +57,15 @@ func (s *stack[T]) Clear() {
 
 func (s *stack[T]) Empty() bool {
 	return s.Len() == 0
+}
+
+func (s *stack[T]) MaxLen() int {
+	max := ""
+	for _, v := range *s {
+		str := fmt.Sprintf("%v", v)
+		if len(str) > len(max) {
+			max = str
+		}
+	}
+	return len(max)
 }

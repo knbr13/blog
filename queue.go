@@ -8,4 +8,13 @@ func NewQueue[T any]() *Queue[T] {
 
 func (q *Queue[T]) Len() int { return len(*q) }
 
-func (q *Queue[T]) Add(t T) { *q = append(*q, t) }
+func (q *Queue[T]) Enqueue(t T) { *q = append(*q, t) }
+
+func (q *Queue[T]) Dequeue() *T {
+	if q.Len() == 0 {
+		return nil
+	}
+	deleted := (*q)[0]
+	(*q) = (*q)[1:]
+	return &deleted
+}

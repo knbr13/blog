@@ -18,3 +18,10 @@ func (q *Queue[T]) Dequeue() *T {
 	(*q) = (*q)[1:]
 	return &deleted
 }
+
+func (q *Queue[T]) Peek() *T {
+	if q.Len() == 0 {
+		return nil
+	}
+	return &(*q)[0]
+}

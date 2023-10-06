@@ -25,3 +25,15 @@ func (q *Queue[T]) Peek() *T {
 	}
 	return &(*q)[0]
 }
+
+func (q *Queue[T]) Empty() bool {
+	return q.Len() == 0
+}
+
+func (q *Queue[T]) Size() int {
+	return q.Len()
+}
+
+func (q *Queue[T]) Clear() {
+	*q = (*q)[:0]
+}

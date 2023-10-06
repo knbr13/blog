@@ -1,11 +1,32 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
 type queue[T any] []T
 
-func Newqueue[T any]() *queue[T] {
+func NewQueue[T any]() *queue[T] {
 	return &queue[T]{}
+}
+
+func (q *queue[T]) String() string {
+	var sb strings.Builder
+
+	sb.WriteString(strings.Repeat("—", q.MaxLen()+4))
+	sb.WriteString("\n")
+
+	for i := len(*q) - 1; i >= 0; i-- {
+		sb.WriteString("|")
+		sb.WriteString(fmt.Sprintf(" %v ", (*q)[i]))
+		sb.WriteString("|\n")
+	}
+
+	sb.WriteString(strings.Repeat("—", q.MaxLen()+4))
+	sb.WriteString("\n")
+
+	return sb.String()
 }
 
 func (q *queue[T]) Len() int { return len(*q) }

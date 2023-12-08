@@ -26,9 +26,6 @@ func main() {
 		os.Exit(0)
 	}()
 
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("hello world\n"))
-	})
 	go func() {
 		log.Fatal(srv.ListenAndServe())
 	}()

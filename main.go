@@ -9,6 +9,11 @@ import (
 )
 
 func main() {
+	srv := &http.Server{
+		Addr:    ":8080",
+		Handler: nil,
+	}
+
 	go func() {
 		quit := make(chan os.Signal, 1)
 		signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
@@ -21,5 +26,5 @@ func main() {
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("hello world\n"))
 	})
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	log.Fatal(srv.ListenAndServe())
 }

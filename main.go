@@ -1,11 +1,13 @@
 package main
 
 import (
+	"context"
 	"log"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
+	"time"
 )
 
 func main() {
@@ -23,8 +25,16 @@ func main() {
 		})
 		os.Exit(0)
 	}()
+
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("hello world\n"))
 	})
-	log.Fatal(srv.ListenAndServe())
+	go func() {
+		log.Fatal(srv.ListenAndServe())
+	}()
+	err := srv.Shutdown(context.Background())
+	if err != nil {
+		log.Fatal("error shutting down: ", err)
+	}
+	time.Sleep(time.Second * 2)
 }

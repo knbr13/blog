@@ -14,7 +14,7 @@ func scanGitRepositories(root string) ([]string, error) {
 		}
 
 		if info.IsDir() && info.Name() == ".git" {
-			parent := filepath.Dir(root)
+			parent := filepath.Dir(path)
 			result = append(result, parent)
 			return filepath.SkipDir
 		}

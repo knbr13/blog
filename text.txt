@@ -1,5 +1,0 @@
-GET / HTTP/1.1
-Accept:*/*
-Content-Type: text/plain
-
-hello world

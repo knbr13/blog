@@ -14,3 +14,24 @@ func daysAgo(t time.Time) int {
 	}
 	return hours/24 + 1
 }
+
+func getOffset() int {
+	now := time.Now()
+	switch now.Weekday() {
+	case time.Sunday:
+		return 0
+	case time.Monday:
+		return 1
+	case time.Tuesday:
+		return 2
+	case time.Wednesday:
+		return 3
+	case time.Thursday:
+		return 4
+	case time.Friday:
+		return 5
+	case time.Saturday:
+		return 6
+	}
+	panic("unhandled time")
+}

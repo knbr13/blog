@@ -28,7 +28,7 @@ var ignoreDirectories = []string{
 	"pubspec.lock",
 }
 
-func scanGitFolders(root, email string) ([]string, error) {
+func scanGitFolders(root string) ([]string, error) {
 	var gitFolders []string
 	err := filepath.Walk(root, func(path string, info fs.FileInfo, err error) error {
 		if err != nil {

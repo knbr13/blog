@@ -1,6 +1,9 @@
 package main
 
-import "time"
+import (
+	"math"
+	"time"
+)
 
 func daysAgo(t time.Time) int {
 	now := time.Now()
@@ -34,4 +37,14 @@ func getOffset() int {
 		return 6
 	}
 	panic("unhandled time")
+}
+
+func getMaxValue(m map[int]int) int {
+	max := math.MinInt
+	for _, v := range m {
+		if v > max {
+			max = v
+		}
+	}
+	return max
 }

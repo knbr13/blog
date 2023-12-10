@@ -21,7 +21,7 @@ func printTable(commits map[int]int) {
 	s := strings.Builder{}
 	for i := 0; i < 7; i++ {
 		s.WriteString(fmt.Sprintf("%-12s", getDay(i)))
-		for j := daysAgoFromSixMonths; j >= 0; j -= 7 {
+		for j := daysAgoFromSixMonths+getOffset()-1; j >= 0; j -= 7 {
 			s.WriteString(fmt.Sprintf(" %2d ", commits[j-i]))
 		}
 		fmt.Println(s.String())

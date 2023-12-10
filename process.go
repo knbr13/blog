@@ -41,5 +41,14 @@ func fillCommits(path, email string, commits map[int]int) error {
 		commits[days]++
 		return nil
 	})
-	return err
+	if err != nil {
+		return err
+	}
+	for i := time.Now(); i.After(sixMonthsAgo); i = i.AddDate(0, 0, -1) {
+		days := daysAgo(i)
+		if _, ok := commits[days]; !ok {
+			commits[days] = 0
+		}
+	}
+	return nil
 }

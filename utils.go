@@ -2,10 +2,10 @@ package main
 
 import "time"
 
-func daysAgo(end time.Time) int {
+func daysAgo(t time.Time) int {
 	now := time.Now()
 	today := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, now.Location())
-	hours := int(end.Sub(today).Hours())
+	hours := int(t.Sub(today).Hours())
 	if hours < 0 {
 		return 0
 	}

@@ -1,7 +1,19 @@
 package main
 
-import "fmt"
+import (
+	"log"
+)
 
 func main() {
-	fmt.Println("hello world!")
+	folders, err := scanGitFolders("/home/fiber/dev")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	commits, err := processRepos(folders, "abdullahalaadine63@gmail.com")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	printTable(commits)
 }

@@ -16,6 +16,19 @@ func buildHeader(start, end time.Time) string {
 	return s.String()
 }
 
+func printTable(commits map[int]int) {
+	fmt.Printf("%s%s%s\n", sixEmptySpaces, sixEmptySpaces, buildHeader(sixMonthsAgo, time.Now()))
+	s := strings.Builder{}
+	for i := 0; i < 7; i++ {
+		s.WriteString(fmt.Sprintf("%-12s", getDay(i)))
+		for j := daysAgoFromSixMonths; j >= 0; j -= 7 {
+			s.WriteString(fmt.Sprintf(" %2d ", commits[j-i]))
+		}
+		fmt.Println(s.String())
+		s.Reset()
+	}
+}
+
 func getDay(i int) string {
 	switch i {
 	case 0:

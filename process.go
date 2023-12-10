@@ -51,5 +51,8 @@ func fillCommits(path, email string, commits map[int]int) error {
 			commits[days] = 0
 		}
 	}
+	for i := daysAgoFromSixMonths; i < daysAgoFromSixMonths+getOffset()-1; i++ {
+		commits[i] = 0
+	}
 	return nil
 }

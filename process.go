@@ -8,6 +8,7 @@ import (
 )
 
 var sixMonthsAgo time.Time = time.Now().AddDate(0, -6, 0)
+var daysAgoFromSixMonths int = daysAgo(sixMonthsAgo)
 
 func processRepos(repos []string, email string) (map[int]int, error) {
 	m := map[int]int{}

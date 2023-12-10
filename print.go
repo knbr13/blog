@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"strings"
 	"time"
+
+	"github.com/gookit/color"
 )
 
 var sixEmptySpaces = strings.Repeat(" ", 6)
@@ -19,10 +21,11 @@ func buildHeader(start, end time.Time) string {
 func printTable(commits map[int]int) {
 	fmt.Printf("%s%s%s\n", sixEmptySpaces, sixEmptySpaces, buildHeader(sixMonthsAgo, time.Now()))
 	s := strings.Builder{}
+	max := getMaxValue(commits)
 	for i := 0; i < 7; i++ {
 		s.WriteString(fmt.Sprintf("%-12s", getDay(i)))
-		for j := daysAgoFromSixMonths+getOffset()-1; j >= 0; j -= 7 {
-			s.WriteString(fmt.Sprintf(" %2d ", commits[j-i]))
+		for j := daysAgoFromSixMonths + getOffset() - 1; j >= 0; j -= 7 {
+			s.WriteString(printCell(commits[j-i], max))
 		}
 		fmt.Println(s.String())
 		s.Reset()
@@ -47,4 +50,21 @@ func getDay(i int) string {
 		return "Sat"
 	}
 	return strings.Repeat(" ", 3)
+}
+
+func printCell(n, maxVal int) string {
+	var printingColor color.Style
+	if n == 0 {
+		printingColor = color.New(color.FgBlack, color.BgDarkGray)
+		return printingColor.Sprint("  0 ")
+	}
+	if n <= maxVal/4 {
+		printingColor = color.New(color.FgBlack, color.BgLightGreen)
+		return printingColor.Sprintf(" %2d ", n)
+	} else if n <= maxVal/2 {
+		printingColor = color.New(color.FgBlack, color.BgGreen)
+		return printingColor.Sprintf(" %2d ", n)
+	}
+	printingColor = color.New(color.FgLightGreen, color.BgBlack)
+	return printingColor.Sprintf(" %2d ", n)
 }

@@ -5,7 +5,7 @@ import "time"
 func daysAgo(t time.Time) int {
 	now := time.Now()
 	today := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, now.Location())
-	hours := int(t.Sub(today).Hours())
+	hours := int(today.Sub(t).Hours())
 	if hours < 0 {
 		return 0
 	}

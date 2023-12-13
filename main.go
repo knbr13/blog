@@ -1,19 +1,10 @@
 package main
 
-import (
-	"fmt"
-	"log"
-	"os"
-)
+import "fmt"
 
 func main() {
-	f, err := os.Create("text.txt")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer f.Close()
-
-	os.Stdout = f
-	fmt.Fprintln(os.Stdout, "hello world!")
-	fmt.Println("this is me!")
+	hello := []byte("hello")
+	helloCopy := make([]byte, 5)
+	copy(helloCopy, hello)
+	fmt.Println(string(helloCopy))
 }

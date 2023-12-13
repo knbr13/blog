@@ -16,5 +16,4 @@ func main() {
 	os.Stdout = f
 	fmt.Fprintln(os.Stdout, "hello world!")
 	fmt.Println("this is me!")
-	println()
 }

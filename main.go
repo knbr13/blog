@@ -1,5 +1,12 @@
 package main
 
+import "fmt"
+
+func main() {
+	p := NewPerson(WithAge(10), WithGender("Male"), WithName("Abdullah"))
+	fmt.Printf("person name: %s | person gender: %s | person age: %d\n", p.Name, p.Gender, p.Age)
+}
+
 type Person struct {
 	Name   string
 	Age    int

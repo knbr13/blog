@@ -21,3 +21,9 @@ func WithName(name string) Option {
 		person.Name = name
 	}
 }
+
+func WithAge(age int) Option {
+	return func(person *Person) {
+		person.Age = age
+	}
+}

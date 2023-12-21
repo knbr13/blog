@@ -27,3 +27,9 @@ func WithAge(age int) Option {
 		person.Age = age
 	}
 }
+
+func WithGender(gender string) Option {
+	return func(person *Person) {
+		person.Gender = gender
+	}
+}

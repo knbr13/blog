@@ -15,3 +15,9 @@ func NewPerson(options ...Option) *Person {
 	}
 	return person
 }
+
+func WithName(name string) Option {
+	return func(person *Person) {
+		person.Name = name
+	}
+}

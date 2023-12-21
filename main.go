@@ -5,3 +5,5 @@ type Person struct {
 	Age    int
 	Gender string
 }
+
+type Option func(*Person)

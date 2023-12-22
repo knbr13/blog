@@ -2,6 +2,7 @@ package main
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -18,6 +19,19 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	user1, err := getUserByID(db, 1)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	user2, err := getUserByID(db, 2)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Printf("user1: %+v\n", user1)
+	fmt.Printf("user2: %+v\n", user2)
 }
 
 type User struct {

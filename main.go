@@ -20,18 +20,32 @@ func main() {
 		log.Fatal(err)
 	}
 
+	fmt.Println("fetching user...")
+
 	user1, err := getUserByID(db, 1)
 	if err != nil {
 		log.Fatal(err)
 	}
+	fmt.Printf("user1: %+v\n", user1)
+
+	fmt.Println("fetching user...")
 
 	user2, err := getUserByID(db, 2)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	fmt.Printf("user1: %+v\n", user1)
 	fmt.Printf("user2: %+v\n", user2)
+
+	fmt.Println("fetching users...")
+
+	users, err := getUsers(db)
+	if err != nil {
+		log.Fatal(err)
+	}
+	for i, user := range users {
+		fmt.Println("user:", i+1, ":", user)
+	}
 }
 
 type User struct {

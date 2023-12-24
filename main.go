@@ -2,10 +2,10 @@ package main
 
 import (
 	"database/sql"
-	"fmt"
 	"log"
 
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/jackskj/carta"
 )
 
 func main() {
@@ -20,40 +20,22 @@ func main() {
 		log.Fatal(err)
 	}
 
-	fmt.Println("fetching user...")
-
-	user1, err := getUserByID(db, 1)
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Printf("user1: %+v\n", user1)
-
-	fmt.Println("fetching user...")
-
-	user2, err := getUserByID(db, 2)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	fmt.Printf("user2: %+v\n", user2)
-
-	fmt.Println("fetching users...")
-
-	users, err := getUsers(db)
-	if err != nil {
-		log.Fatal(err)
-	}
-	for i, user := range users {
-		fmt.Println("user:", i+1, ":", user)
-	}
+	db.SetMaxOpenConns(1)
 }
 
 type User struct {
-	ID   int    `json:"id"`
-	Name string `json:"name"`
+	ID       int       `json:"id"`
+	Name     string    `json:"name"`
+	Accounts []Account `json:"accounts"`
 }
 
-func getUsers(db *sql.DB) ([]User, error) {
+type Account struct {
+	ID     int    `json:"id"`
+	Name   string `json:"name"`
+	UserID int    `json:"user_id"`
+}
+
+func GetUsers(db *sql.DB) ([]User, error) {
 	var users []User
 	rows, err := db.Query("select * from users")
 	if err != nil {
@@ -73,8 +55,23 @@ func getUsers(db *sql.DB) ([]User, error) {
 	return users, nil
 }
 
-func getUserByID(db *sql.DB, userID int) (*User, error) {
+func GetUserByID(db *sql.DB, userID int) (*User, error) {
 	var user User
 	err := db.QueryRow("select * from users where id = ?", userID).Scan(&user.ID, &user.Name)
 	return &user, err
+}
+
+func getUserWithAccounts(db *sql.DB, userID int) (*User, error) {
+	var user User
+	rows, err := db.Query("select * from users left join accounts where id = ?", userID)
+	if err != nil {
+		return nil, err
+	}
+
+	err = carta.Map(rows, &user)
+	if err != nil {
+		return nil, err
+	}
+
+	return &user, nil
 }

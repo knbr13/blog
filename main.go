@@ -2,6 +2,7 @@ package main
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -21,6 +22,38 @@ func main() {
 	}
 
 	db.SetMaxOpenConns(1)
+
+	user, err := getUserWithAccounts(db, 1)
+	if err != nil {
+		fmt.Println("err:", err)
+	}
+
+	fmt.Printf("user: %+v\n", user)
+
+	user, err = getUserWithAccounts(db, 1)
+	if err != nil {
+		fmt.Println("err:", err)
+	}
+
+	fmt.Printf("user: %+v\n", user)
+	user, err = getUserWithAccounts(db, 1)
+	if err != nil {
+		fmt.Println("err:", err)
+	}
+
+	fmt.Printf("user: %+v\n", user)
+	user, err = getUserWithAccounts(db, 1)
+	if err != nil {
+		fmt.Println("err:", err)
+	}
+
+	fmt.Printf("user: %+v\n", user)
+	user, err = getUserWithAccounts(db, 1)
+	if err != nil {
+		fmt.Println("err:", err)
+	}
+
+	fmt.Printf("user: %+v\n", user)
 }
 
 type User struct {
@@ -61,9 +94,15 @@ func GetUserByID(db *sql.DB, userID int) (*User, error) {
 	return &user, err
 }
 
+type X struct {
+	ID     bool
+	Name   int
+	UserId bool
+}
+
 func getUserWithAccounts(db *sql.DB, userID int) (*User, error) {
 	var user User
-	rows, err := db.Query("select * from users left join accounts where id = ?", userID)
+	rows, err := db.Query("select * from users left join accounts on users.id = accounts.user_id")
 	if err != nil {
 		return nil, err
 	}

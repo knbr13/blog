@@ -2,16 +2,14 @@ package main
 
 import (
 	"fmt"
-	"strings"
+
+	"github.com/lithammer/fuzzysearch/fuzzy"
 )
 
 func main() {
-	s := "hello_world_how_are_you_there?"
-	ss := strings.FieldsFunc(s, func(r rune) bool {
-		return r == '_'
-	})
-
-	for _, v := range ss {
-		fmt.Println(v)
-	}
+	s1 := "git"
+	s2 := "go-cleanhttp"
+	rank := fuzzy.LevenshteinDistance(s1, s2)
+	fmt.Println(rank)
+	fmt.Println((rank/(rank+1) + 1) * 25)
 }

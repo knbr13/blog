@@ -1,28 +1,17 @@
 package main
 
 import (
-	"bytes"
 	"fmt"
-	"io"
-	"log"
-	"os"
+	"strings"
 )
 
 func main() {
-	f, err := os.Open("secret.file.txt")
-	if err != nil {
-		log.Fatal(err)
-	}
-	var buf bytes.Buffer
-	fmt.Println("buf len:", buf.Len())
-	fmt.Println("buf cap:", buf.Cap())
-	n, err := io.Copy(&buf, f)
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Println("n:", n)
+	s := "hello_world_how_are_you_there?"
+	ss := strings.FieldsFunc(s, func(r rune) bool {
+		return r == '_'
+	})
 
-	fmt.Println("buf len:", buf.Len())
-	fmt.Println("buf cap:", buf.Cap())
-	fmt.Println(buf.String())
+	for _, v := range ss {
+		fmt.Println(v)
+	}
 }

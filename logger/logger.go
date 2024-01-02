@@ -1,6 +1,9 @@
 package logger
 
-import "go.uber.org/zap"
+import (
+	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
+)
 
 type internalLogger struct {
 	logger *zap.Logger
@@ -18,4 +21,8 @@ func init() {
 
 func GetLogger() *internalLogger {
 	return &logger
+}
+
+func (l *internalLogger) Info(msg string, fields ...zapcore.Field) {
+	l.logger.Info(msg, fields...)
 }

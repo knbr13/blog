@@ -1,9 +1,9 @@
 package main
 
 import (
-	"hello/logger"
-
 	"go.uber.org/zap"
+
+	"hello/logger"
 )
 
 func main() {

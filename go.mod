@@ -2,6 +2,6 @@ module hello
 
 go 1.21.4
 
-require github.com/lithammer/fuzzysearch v1.1.8
+require go.uber.org/zap v1.26.0
 
-require golang.org/x/text v0.9.0 // indirect
+require go.uber.org/multierr v1.10.0 // indirect

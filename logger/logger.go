@@ -15,3 +15,7 @@ func init() {
 	}
 	logger.logger = zapLogger
 }
+
+func GetLogger() *internalLogger {
+	return &logger
+}

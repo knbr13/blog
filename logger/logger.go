@@ -2,7 +2,6 @@ package logger
 
 import (
 	"go.uber.org/zap"
-	"go.uber.org/zap/zapcore"
 )
 
 type internalLogger struct {
@@ -23,26 +22,26 @@ func GetLogger() *internalLogger {
 	return &logger
 }
 
-func (l *internalLogger) Info(msg string, fields ...zapcore.Field) {
+func (l *internalLogger) Info(msg string, fields ...zap.Field) {
 	l.logger.Info(msg, fields...)
 }
 
-func (l *internalLogger) Error(msg string, fields ...zapcore.Field) {
+func (l *internalLogger) Error(msg string, fields ...zap.Field) {
 	l.logger.Error(msg, fields...)
 }
 
-func (l *internalLogger) Debug(msg string, fields ...zapcore.Field) {
+func (l *internalLogger) Debug(msg string, fields ...zap.Field) {
 	l.logger.Debug(msg, fields...)
 }
 
-func (l *internalLogger) Warn(msg string, fields ...zapcore.Field) {
+func (l *internalLogger) Warn(msg string, fields ...zap.Field) {
 	l.logger.Warn(msg, fields...)
 }
 
-func (l *internalLogger) Fatal(msg string, fields ...zapcore.Field) {
+func (l *internalLogger) Fatal(msg string, fields ...zap.Field) {
 	l.logger.Fatal(msg, fields...)
 }
 
-func (l *internalLogger) Panic(msg string, fields ...zapcore.Field) {
+func (l *internalLogger) Panic(msg string, fields ...zap.Field) {
 	l.logger.Panic(msg, fields...)
 }

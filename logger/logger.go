@@ -45,3 +45,7 @@ func (l *internalLogger) Fatal(msg string, fields ...zap.Field) {
 func (l *internalLogger) Panic(msg string, fields ...zap.Field) {
 	l.logger.Panic(msg, fields...)
 }
+
+func GetInternalLogger() *zap.Logger {
+	return logger.logger
+}

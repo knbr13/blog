@@ -3,10 +3,10 @@ package main
 import (
 	"hello/logger"
 
-	"go.uber.org/zap/zapcore"
+	"go.uber.org/zap"
 )
 
 func main() {
 	customLogger := logger.GetLogger()
-	customLogger.Info("hello world", zapcore.Field{Key: "name", Type: zapcore.StringType, String: "Jane"})
+	customLogger.Info("hello world", zap.String("Name", "Jane"), zap.Int("Age", 19))
 }

@@ -1,7 +1,13 @@
 package main
 
-import "fmt"
+import (
+	"log"
+	"os"
+)
 
 func main() {
-	fmt.Println("hello world!")
+	err := os.WriteFile("hello.txt", []byte("hello world from hello.txt!"), 0655)
+	if err != nil {
+		log.Fatal(err)
+	}
 }

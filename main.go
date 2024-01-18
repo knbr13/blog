@@ -17,5 +17,5 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Printf("size of file %q: %d\n", f.Name(), stat.Size())
+	fmt.Printf("size of file %q: %d bytes\n", f.Name(), stat.Size())
 }

@@ -3,19 +3,15 @@ package main
 import (
 	"fmt"
 	"log"
-	"os"
+	"net/http"
 )
 
 func main() {
-	f, err := os.Open("hello.txt")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer f.Close()
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprint(w, "hello\n")
+	})
 
-	stat, err := f.Stat()
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Printf("size of file %q: %d bytes\n", f.Name(), stat.Size())
+	
+	log.Println("start...")
+	log.Fatal(http.ListenAndServe(":8080", nil))
 }

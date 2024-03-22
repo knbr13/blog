@@ -11,7 +11,6 @@ func main() {
 		fmt.Fprint(w, "hello\n")
 	})
 
-	
 	log.Println("start...")
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }

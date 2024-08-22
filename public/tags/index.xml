@@ -4,8 +4,13 @@
     <title>Tags on Abdullah Alaadine</title>
     <link>//localhost:1313/tags/</link>
     <description>Recent content in Tags on Abdullah Alaadine</description>
+    <image>
+      <title>Abdullah Alaadine</title>
+      <url>//localhost:1313/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</url>
+      <link>//localhost:1313/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</link>
+    </image>
     <generator>Hugo -- 0.133.0</generator>
-    <language>en-us</language>
+    <language>en</language>
     <atom:link href="//localhost:1313/tags/index.xml" rel="self" type="application/rss+xml" />
   </channel>
 </rss>

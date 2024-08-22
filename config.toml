@@ -1,3 +1,5 @@
 baseURL = ''
 languageCode = 'en-us'
-title = 'My New Hugo Site'
+title = 'Abdullah Alaadine'
+
+theme = 'PaperMod'

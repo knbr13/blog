@@ -10,6 +10,11 @@ type Config struct {
 	CommitLog CommitLog
 }
 
+type CommitLog interface {
+	Append(*api.Record) (uint64, error)
+	Read(uint64) (*api.Record, error)
+}
+
 var _ api.LogServer = (*grpcServer)(nil)
 
 type grpcServer struct {

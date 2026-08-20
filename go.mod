@@ -7,6 +7,7 @@ require (
 	github.com/grpc-ecosystem/go-grpc-middleware v1.4.0
 	github.com/hashicorp/serf v0.10.4
 	github.com/stretchr/testify v1.11.1
+	github.com/travisjeffery/go-dynaport v1.0.0
 	github.com/tysonmote/gommap v0.0.3
 	go.opencensus.io v0.24.0
 	go.uber.org/zap v1.18.1
